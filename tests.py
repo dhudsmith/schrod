@@ -1,14 +1,14 @@
-import tise
+import schrod
 import time
 import numpy as np
 import matplotlib.pyplot as plt
 
 def timeit(x, V, n_basis_vec, n_tests=1):
 
-    # Initialize the tise
-    se = tise.tise(x, V)
+    # Initialize the Schrod
+    se = schrod.schrod(x, V)
 
-    # Time the tise for different numbers of basis states
+    # Time the Schrod for different numbers of basis states
     times=[]
     for n in n_basis_vec:
         avg_time = 0
@@ -25,8 +25,8 @@ def timeit(x, V, n_basis_vec, n_tests=1):
 
 def error(x, V, n_basis_vec, exact):
 
-    # Initialize the tise
-    se = tise.tise(x, V)
+    # Initialize the Schrod
+    se = schrod.schrod(x, V)
 
     # Calculate the error
     rel_err=[]

@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.integrate import simps
 
-class tise:
+class schrod:
     """
     A class for representing and solving the time-independent schrodinger
     equation.
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     V_vec = np.asarray(([1000 * x ** 2 for x in x_vec],))
 
     # TISE
-    tiseq = tise(x_vec, V_vec, 200)
+    tiseq = schrod(x_vec, V_vec, 200)
 
     t0 = time.time()
     tiseq._H()
