@@ -12,9 +12,9 @@ class tise:
     eigvals = None
     eigvecs = None
 
-    _x_min = None
-    _x_max = None
-    _box_size = None
+    x_min = None
+    x_max = None
+    box_size = None
     _x_center = None
 
     def __init__(self, x, V, n_basis=20):
@@ -30,15 +30,20 @@ class tise:
         self.V = V
         self.n_basis=n_basis
 
-        self._x_min = x[0]
-        self._x_max = x[-1]
-        self._box_size = np.abs(self._x_max - self._x_min)
-        self._x_center = self._x_min + self._box_size/2.
+        self.x_min = x[0]
+        self.x_max = x[-1]
+        self.box_size = np.abs(self.x_max - self.x_min)
+        self._x_center = self.x_min + self.box_size / 2.
 
-    def eigsys(self):
-        print("Diagonalizing the Hamiltonian matrices...")
-        self.eigvals, self.eigvecs = np.linalg.eigh(self._H(), UPLO='L')
-        print("Complete.")
+    def solve(self, verbose=False):
+        if verbose:
+            print("Calculating the Hamiltonian matrices...")
+        Hs = self._H(verbose)
+
+        if verbose:
+            print("Diagonalizing the Hamiltonian matrices...")
+
+        self.eigvals, self.eigvecs = np.linalg.eigh(Hs, UPLO='L')
 
         return self.eigvals, self.eigvecs
 
@@ -70,10 +75,10 @@ class tise:
     # Set functions
     def set_x(self, x):
         self.x = x
-        self._x_min = x[0]
-        self._x_max = x[-1]
-        self._box_size = self._x_max = self._x_min
-        self._x_center = self._x_min + self._box_size/2.
+        self.x_min = x[0]
+        self.x_max = x[-1]
+        self.box_size = self.x_max = self.x_min
+        self._x_center = self.x_min + self.box_size / 2.
 
     def set_V(self, V):
         self.V = V
@@ -82,8 +87,7 @@ class tise:
         self.n_basis = n_basis
 
     # Private functions:
-    def _H(self):
-        print("Calculating Hamiltonian matrices...")
+    def _H(self, verbose=False):
         n_matels = self.n_basis * (self.n_basis + 1) / 2
         h = np.zeros((self.V.shape[0], self.n_basis, self.n_basis))
         for m in range(self.n_basis):
@@ -93,11 +97,15 @@ class tise:
                 # Print a status
                 n_sofar = (m + 1) * m / 2 + n + 1
                 percent = n_sofar / n_matels * 100
-                print("\rStatus: %0.2f %% complete" % percent, end='')
 
-        print("")
+                if verbose:
+                    print("\r  Status: %0.2f %% complete" % percent, end='')
+
+        if verbose:
+            print("")
 
         return h + np.diag(self._E0(np.arange(1, self.n_basis + 1)))
+
     def _psi0(self, n, x):
         """
         Evaluate the nth box state at x
@@ -105,10 +113,10 @@ class tise:
         :param x: array-like, positions between -1 and 1
         :return: an array of shape (len(n), len(x))
         """
-        kn = n * np.pi / self._box_size
+        kn = n * np.pi / self.box_size
 
-        return np.sqrt(2/self._box_size)*\
-               np.sin(np.outer(kn, x - self._x_center + self._box_size/2))
+        return np.sqrt(2 / self.box_size) * \
+               np.sin(np.outer(kn, x - self._x_center + self.box_size / 2))
 
 
     def _E0(self, n):
@@ -117,7 +125,7 @@ class tise:
         :param n: the state label
         :return: the energy
         """
-        return n ** 2 * np.pi ** 2 / (2. * self._box_size**2)
+        return n ** 2 * np.pi ** 2 / (2. * self.box_size ** 2)
 
 
     def _matel_integrand(self, m, n):
@@ -136,37 +144,20 @@ class tise:
     def _Vmn(self, m, n):
         return simps(x=self.x, y=self._matel_integrand(m, n), axis=1)
 
-
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    # Import
+    import time
 
-    x_vec = np.linspace(-1,1,200)
-    V_vec = np.asarray(([1000*x**2 for x in x_vec],))
+    # The harmonic oscillator
+    x_vec = np.linspace(-1, 1, 200)
+    V_vec = np.asarray(([1000 * x ** 2 for x in x_vec],))
 
-    tiseq = tise(x_vec, V_vec)
+    # TISE
+    tiseq = tise(x_vec, V_vec, 200)
 
-    # plt.clf()
-    # plt.ylim((0, 500))
-    # n_plt=10
-    # tiseq.set_n_basis(30)
-    # evals, evecs = tiseq.eigsys()
-    # probs = tiseq.prob()
-    # for i in range(n_plt):
-    #     plt.plot(x_vec, V_vec[0], 'k-', lw=2)
-    #     plt.plot(x_vec, evals[0,i]+5*probs[0,i], 'b-', lw=2)
-    #     plt.axhline(evals[0, i], -1, 1, color='k', ls=':', lw=2)
-    #
-    # tiseq.set_n_basis(60)
-    # evals, evecs = tiseq.eigsys()
-    # probs = tiseq.prob()
-    # for i in range(n_plt):
-    #     plt.plot(x_vec, V_vec[0], 'k-', lw=2)
-    #     plt.plot(x_vec, evals[0, i] + 5 * probs[0, i], 'r-', lw=2)
-    #     plt.axhline(evals[0, i], -1, 1, color='k', ls='--', lw=2)
-    #
-    # plt.show()
-
-    tiseq.set_n_basis(200)
+    t0 = time.time()
+    tiseq._H()
+    print("For loop time: %0.3f seconds" % (time.time() - t0))
 
 
 
