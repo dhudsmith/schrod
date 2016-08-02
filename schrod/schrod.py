@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.integrate import simps
 
-class schrod:
+
+class Schrod:
     """
     A class for representing and solving the time-independent schrodinger
     equation.
@@ -28,7 +29,7 @@ class schrod:
         """
         self.x = x
         self.V = V
-        self.n_basis=n_basis
+        self.n_basis = n_basis
 
         self.x_min = x[0]
         self.x_max = x[-1]
@@ -54,7 +55,7 @@ class schrod:
                       self._psi0(basis_vec, self.x))
 
     def prob(self):
-        return self.psi()**2
+        return self.psi() ** 2
 
     # Get functions
     def get_x(self):
@@ -118,7 +119,6 @@ class schrod:
         return np.sqrt(2 / self.box_size) * \
                np.sin(np.outer(kn, x - self._x_center + self.box_size / 2))
 
-
     def _E0(self, n):
         """
         The nth energy level in the box
@@ -126,7 +126,6 @@ class schrod:
         :return: the energy
         """
         return n ** 2 * np.pi ** 2 / (2. * self.box_size ** 2)
-
 
     def _matel_integrand(self, m, n):
         """
@@ -140,9 +139,9 @@ class schrod:
         """
         return self._psi0(m + 1, self.x) * self._psi0(n + 1, self.x) * self.V
 
-
     def _Vmn(self, m, n):
         return simps(x=self.x, y=self._matel_integrand(m, n), axis=1)
+
 
 if __name__ == "__main__":
     # Import
@@ -153,11 +152,8 @@ if __name__ == "__main__":
     V_vec = np.asarray(([1000 * x ** 2 for x in x_vec],))
 
     # TISE
-    tiseq = schrod(x_vec, V_vec, 200)
+    tiseq = Schrod(x_vec, V_vec, 200)
 
     t0 = time.time()
     tiseq._H()
     print("For loop time: %0.3f seconds" % (time.time() - t0))
-
-
-
