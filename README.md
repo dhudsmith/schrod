@@ -1,5 +1,5 @@
 # schrod
-### *A simple, accurate, and fast module for solving single particle Schrodinger equations*
+### *A simple, accurate, and fast module for solving the single particle Schrodinger equation*
 
 # Features:
 
