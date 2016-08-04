@@ -9,6 +9,27 @@ def issorted(x):
     """Check if x is sorted"""
     return (np.diff(x) >= 0).all()
 
+def doesConverge(schrod, tol = 1e-6, n_eig=5, n_init=5, n_max=50, n_step=5):
+    # The initial truncation
+    eigs = schrod.solve()[0][:, 0:n_eig]
+
+    # increase the basis size until failure
+    # or test_tol is achieved
+    measured_tol = 1  # the max rel. err. of the eigenvalues
+    n = n_init
+    passed = False
+    while measured_tol >= tol and n <= n_max:
+        n += n_step
+        schrod.set_n_basis(n)
+        eigs_new = schrod.solve()[0][:, 0:n_eig]
+
+        measured_tol = np.mean(np.abs((eigs - eigs_new) / 0.5 / (eigs + eigs_new)))
+        eigs = eigs_new
+
+        if measured_tol <= tol:
+            passed = True
+
+
 # ----- The tests -----
 class TestSchrod(TestCase):
 
@@ -28,7 +49,10 @@ class TestSchrod(TestCase):
         # The potentials
         n_V = 10
         sig = 2
-        V_rand = np.random.normal(0, sig, (n_V,n_x) )
+        V_rand = np.random.normal(0, sig, n_V ) + \
+                 np.random.normal(0, sig, n_V ) * \
+                 np.sin(np.outer(np.random.normal(0, sig, n_V ), np.ones(n_x)) + np.outer(np.random.normal(0, sig, n_V ),
+                        x_vec) )
 
         # Schrodinger equations
         n_init = 20
@@ -43,7 +67,7 @@ class TestSchrod(TestCase):
 
         # increase the basis size until failure
         # or test_tol is achieved
-        test_tol =1e-6
+        test_tol =1e-2
         measured_tol = 1 # the max rel. err. of the eigenvalues
         n = n_init
         step = 5
