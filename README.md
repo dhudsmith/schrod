@@ -2,6 +2,10 @@
 ### *A simple, accurate, and fast module for solving the single particle Schrodinger equation*
 
 # Installation:
+Prerequisites:
+* Python 3
+* Numpy
+
 1. Clone the repo:
 
  ```bash
