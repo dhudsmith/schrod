@@ -7,6 +7,7 @@ Prerequisites:
 * Numpy
 
 To install:
+
 1. Clone the repo:
 
  ```bash
