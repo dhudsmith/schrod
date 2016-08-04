@@ -5,18 +5,21 @@
 
 1. Simple interface:
 ```python
-import schrodinger
-import numpy as np
+import schrod, numpy
 
 # Specify the potential
-x = np.linspace(-10, 10, 200)
-V = 1/2. * x**2
+x = numpy.linspace(-5, 5, 200)
+V = 1/2 * x**2
 
 # Create and solve Schrodinger's equation
 eqn = schrod.Schrod(x, V)
 eqn.solve()
 
 # Get the results
-print(sch_eqn.eigs[0:3])
->> [  0.50008379   1.50064933   2.51314075  ]
+print(eqn.eigs[0:5])
+>> [ 0.5         1.5         2.50000008  3.50000122  4.50001267]
 ```
+
+2. Accurate:
+
+3. Fast:
