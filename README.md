@@ -1,6 +1,19 @@
 # schrod
 ### *A simple, accurate, and fast module for solving the single particle Schrodinger equation*
 
+# Installation:
+1. Clone the repo:
+```bash
+git clone https://github.com/dhudsmith/schrod.git
+```
+2. From inside the `schrod` directory execute
+```
+python setup.py install --user
+```
+Optionally you can omit `--user` to install for all users.
+
+That's it!
+
 # Features:
 
 ## Simple interface
