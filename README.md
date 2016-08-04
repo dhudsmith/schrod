@@ -6,6 +6,7 @@ Prerequisites:
 * Python 3
 * Numpy
 
+To install:
 1. Clone the repo:
 
  ```bash
