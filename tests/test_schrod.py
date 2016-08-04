@@ -1,7 +1,7 @@
 from unittest import TestCase
-import schrod.schrod as schrod
-import numpy as np
 
+import numpy as np
+import schrod.schrod as schrod
 
 
 # ----- Helper functions -----

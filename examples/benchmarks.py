@@ -1,12 +1,13 @@
-import schrod
 import time
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 def timeit(x, V, n_basis_vec, n_tests=1):
 
     # Initialize the Schrod
-    se = schrod.schrod(x, V)
+    se = Schrod.schrod(x, V)
 
     # Time the Schrod for different numbers of basis states
     times=[]
@@ -26,7 +27,7 @@ def timeit(x, V, n_basis_vec, n_tests=1):
 def error(x, V, n_basis_vec, exact):
 
     # Initialize the Schrod
-    se = schrod.schrod(x, V)
+    se = Schrod.schrod(x, V)
 
     # Calculate the error
     rel_err=[]
