@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Schrod documentation build configuration file, created by
-# sphinx-quickstart on Thu Aug  4 07:29:25 2016.
+# Schrodinger documentation build configuration file, created by
+# sphinx-quickstart on Thu Aug  4 10:05:23 2016.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -50,10 +50,10 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'schrod'
+master_doc = 'index'
 
 # General information about the project.
-project = 'Schrod'
+project = 'Schrodinger'
 copyright = '2016, D. Hudson Smith'
 author = 'D. Hudson Smith'
 
@@ -128,7 +128,7 @@ html_theme = 'alabaster'
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-#html_title = 'Schrod v0.1'
+#html_title = 'Schrodinger v0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -210,7 +210,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Schroddoc'
+htmlhelp_basename = 'Schrodingerdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -232,7 +232,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Schrod.tex', 'Schrod Documentation',
+    (master_doc, 'Schrodinger.tex', 'Schrodinger Documentation',
      'D. Hudson Smith', 'manual'),
 ]
 
@@ -262,7 +262,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'schrod', 'Schrod Documentation',
+    (master_doc, 'schrodinger', 'Schrodinger Documentation',
      [author], 1)
 ]
 
@@ -276,8 +276,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Schrod', 'Schrod Documentation',
-     author, 'Schrod', 'One line description of project.',
+    (master_doc, 'Schrodinger', 'Schrodinger Documentation',
+     author, 'Schrodinger', 'One line description of project.',
      'Miscellaneous'),
 ]
 

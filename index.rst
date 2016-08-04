@@ -1,10 +1,10 @@
-.. Schrod documentation master file, created by
-   sphinx-quickstart on Thu Aug  4 07:29:25 2016.
+.. Schrodinger documentation master file, created by
+   sphinx-quickstart on Thu Aug  4 10:05:23 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Schrod's documentation!
-==================================
+Welcome to Schrodinger's documentation!
+=======================================
 
 Contents:
 
