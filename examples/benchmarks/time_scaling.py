@@ -31,8 +31,7 @@ V = 1 / 2 * x ** 2
 # The number of basis states to scan over
 ns = np.logspace(np.log10(4), np.log10(100), 15, dtype=np.int16)
 print("Tests will be run for the following numbers "
-      "of basis states:\n",
-      ns)
+      "of basis states:\n", ns)
 
 # Calculate how long it takes for each choice of number of basis states
 times = timing(x, V, ns, n_tests=10)
