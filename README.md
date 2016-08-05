@@ -54,7 +54,7 @@ sol = eqn.solve_to_tol(n_eig=5, tol=1e-10, n_init=100, n_max=200)
 
 # Print the first five eigenvalues
 print("Eigenvalues: \n", eqn.eigs[0:5])
-print("Relative error estimate: \n", sol.eig_errs)
+print("Error estimate: \n", sol.eig_errs)
 print("Number of basis states at convergence: \n", sol.n_basis_converged)
 ```
 Output:
