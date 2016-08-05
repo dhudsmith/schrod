@@ -1,23 +1,15 @@
 # schrod
 ### *A simple, accurate, and fast module for solving the single particle Schrodinger equation.*
 
-## Installation:
-### Prerequisites:
-All of the these (and many more) are included with [anaconda](https://www.continuum.io/downloads).
+## Installation
 
-* Python 3
-* Numpy
-* Scipy
-
-
-### Installing `schrod`
-
-1. Clone the repo:
+1. Make sure you have `python3`, `numpy`, and `scipy`. All of the these (and many more) are included with [anaconda](https://www.continuum.io/downloads).
+2. Clone the repo:
 
  ```bash
  git clone https://github.com/dhudsmith/schrod.git
  ```
-2. From inside the `schrod` directory execute
+3. From inside the `schrod` directory execute
 
  ```
  python setup.py install --user
