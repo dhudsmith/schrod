@@ -76,7 +76,7 @@ class Schrod:
         measured_tol = 1  # the max rel. err. of the eigenvalues
         n = n_init
         passed = False
-        while (not passed) and (n <= n_max):
+        while (not passed) and (n+n_step <= n_max):
             n += n_step
 
             self.set_n_basis(n)
