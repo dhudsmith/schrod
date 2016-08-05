@@ -1,12 +1,16 @@
 # schrod
-### *A simple, accurate, and fast module for solving the single particle Schrodinger equation*
+### *A simple, accurate, and fast module for solving the single particle Schrodinger equation.*
 
-# Installation:
-Prerequisites:
+## Installation:
+### Prerequisites:
+All of the these (and many more) are included with [anaconda](https://www.continuum.io/downloads).
+
 * Python 3
 * Numpy
+* Scipy
 
-To install:
+
+### Installing `schrod`
 
 1. Clone the repo:
 
@@ -25,9 +29,8 @@ That's it. To load the package into a python shell, simply execute
 import schrod
 ```
 
-# Features:
-
-## Simple interface
+## Usage
+### The harmonic oscillator
 ```python
 import schrod, numpy
 
@@ -45,8 +48,7 @@ print(eqn.eigs[0:5])
 Output:
 `[ 0.5         1.5         2.50000008  3.50000122  4.50001267]`
 
-## Accurate
-Specify the desired error tolerance using the `solve_to_tol` function:
+###Specify the desired error tolerance
 ```python
 import schrod, numpy
 
