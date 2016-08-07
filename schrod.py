@@ -23,8 +23,7 @@ class Schrod:
         V : array_like, float
             Length-N array giving the potential at each x
         n_basis : int
-            The number of square-well basis states used in the calculation
-            (default=20)
+            The number of square-well basis states used in the calculation (default=20)
         """
 
         # Set the inputs
@@ -34,24 +33,31 @@ class Schrod:
 
         # Validate the inputs
         N = self.x.size
+        assert N > 1
         assert self.x.shape == (N,)
+        assert (np.diff(x) >= 0).all()
 
         V_shape = self.V.shape
         V_shape_len = len(V_shape)
-        assert V_shape_len==1 or V_shape_len==2
-        if V_shape_len==1:
+        assert V_shape_len == 1 or V_shape_len == 2
+        if V_shape_len == 1:
             assert V_shape == (N,)
-        elif V_shape_len==2:
-            assert V_shape[1]==N
+        elif V_shape_len == 2:
+            assert V_shape[1] == N
 
         assert isinstance(n_basis, int)
-        assert n_basis>0
+        assert n_basis > 0
 
         # Set the derived quantities
-        self.x_min = x[0]
-        self.x_max = x[-1]
-        self.box_size = np.abs(self.x_max - self.x_min)
-        self._x_center = self.x_min + self.box_size / 2.
+        self._N = N
+        self._dx = x[1]-x[0]
+        self._x_min = x[0]
+        self._x_max = x[-1]
+        self._box_size = np.abs(self._x_max - self._x_min)
+        self._x_center = self._x_min + self._box_size / 2.
+
+        self._dk = 2*np.pi / self._box_size
+        self.k = -0.5 * self._N * self._dk + self._dk * np.arange(self._N)
 
     def solve(self, verbose=False):
         if verbose:
@@ -173,10 +179,10 @@ class Schrod:
     # Set functions
     def set_x(self, x):
         self.x = x
-        self.x_min = x[0]
-        self.x_max = x[-1]
-        self.box_size = self.x_max = self.x_min
-        self._x_center = self.x_min + self.box_size / 2.
+        self._x_min = x[0]
+        self._x_max = x[-1]
+        self._box_size = self._x_max = self._x_min
+        self._x_center = self._x_min + self._box_size / 2.
 
     def set_V(self, V):
         self.V = V
@@ -218,10 +224,10 @@ class Schrod:
         :param x: array-like, positions between -1 and 1
         :return: an array of shape (len(n), len(x))
         """
-        kn = n * np.pi / self.box_size
+        kn = n * np.pi / self._box_size
 
-        return np.sqrt(2 / self.box_size) * \
-               np.sin(np.outer(kn, x - self._x_center + self.box_size / 2))
+        return np.sqrt(2 / self._box_size) * \
+               np.sin(np.outer(kn, x - self._x_center + self._box_size / 2))
 
     def _E0(self, n):
         """
@@ -229,7 +235,7 @@ class Schrod:
         :param n: the state label
         :return: the energy
         """
-        return n ** 2 * np.pi ** 2 / (2. * self.box_size ** 2)
+        return n ** 2 * np.pi ** 2 / (2. * self._box_size ** 2)
 
     def _matel_integrand(self, m, n):
         """
@@ -246,5 +252,10 @@ class Schrod:
     def _Vmn(self, m, n):
         return simps(x=self.x, y=self._matel_integrand(m, n), axis=-1)
 
+if __name__ == "__main__":
+    x = np.linspace(-1,1,10)
+    V = 1/2 * x**2
 
+    eqn = Schrod(x,V)
+    print(eqn.k)
 
