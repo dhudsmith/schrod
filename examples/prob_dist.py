@@ -17,7 +17,7 @@ probs = eqn.prob()
 # Plot everything
 plt.xlim((x[0],x[-1]))
 plt.ylim((-1,9))
-plt.title("Probability distributions for\n$V(x) = x + 0.5 x^2$", fontsize=18)
+plt.title("Probability distributions for\n$V(x) = x + 0.5 x^4$", fontsize=18)
 plt.xlabel("$x$")
 plt.ylabel('Energy')
 
