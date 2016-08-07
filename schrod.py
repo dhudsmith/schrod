@@ -108,8 +108,10 @@ class Schrod:
     def psi(self):
         basis_vec = np.arange(1, self.vecs.shape[-1] + 1)
 
-        return np.dot(self.vecs.transpose((0, 2, 1)),
-                      self._psi0(basis_vec, self.x))
+        # return np.dot(self.vecs.transpose((0, 2, 1)),
+        #               self._psi0(basis_vec, self.x))
+        return np.tensordot(self.vecs,
+                      self._psi0(basis_vec, self.x), axes=(-2,0))
 
     def prob(self):
         return self.psi() ** 2
