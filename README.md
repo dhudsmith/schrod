@@ -1,5 +1,6 @@
 # schrod
 ### *A simple, accurate, and fast module for solving the single particle Schrodinger equation.*
+<img src="/examples/plots/prob_dist.png" alt="Probability distributions for V(x) = x + 0.5*x^4" width="500"/>
 
 ## Installation
 
