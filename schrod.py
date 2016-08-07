@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.integrate import simps
+from scipy import fftpack
 import warnings
 import collections
 
@@ -12,30 +13,41 @@ class Schrod:
     A class for representing and solving the time-independent schrodinger
     equation.
     """
-    x = None
-    V = None
-    n_basis = None
-    eigs = None
-    vecs = None
-
-    x_min = None
-    x_max = None
-    box_size = None
-    _x_center = None
 
     def __init__(self, x, V, n_basis=20):
         """
-        Initialize a time independent schrodinger equation
-        :param x: an ndarray. The coordinates at which the potential is evaluated.
-        :param V: the potential or potentials to solve. An ndarray
-        of shape (n_V, n_x) where n_V is the number of potentials
-        and n_x is the length of x.
-        :param n_basis:
+        Parameters
+        ----------
+        x : array_like, float
+            Length-N array of evenly spaced spatial coordinates
+        V : array_like, float
+            Length-N array giving the potential at each x
+        n_basis : int
+            The number of square-well basis states used in the calculation
+            (default=20)
         """
+
+        # Set the inputs
         self.x = x
         self.V = V
         self.n_basis = n_basis
 
+        # Validate the inputs
+        N = self.x.size
+        assert self.x.shape == (N,)
+
+        V_shape = self.V.shape
+        V_shape_len = len(V_shape)
+        assert V_shape_len==1 or V_shape_len==2
+        if V_shape_len==1:
+            assert V_shape == (N,)
+        elif V_shape_len==2:
+            assert V_shape[1]==N
+
+        assert isinstance(n_basis, int)
+        assert n_basis>0
+
+        # Set the derived quantities
         self.x_min = x[0]
         self.x_max = x[-1]
         self.box_size = np.abs(self.x_max - self.x_min)
@@ -108,10 +120,36 @@ class Schrod:
     def psi(self):
         basis_vec = np.arange(1, self.vecs.shape[-1] + 1)
 
-        # return np.dot(self.vecs.transpose((0, 2, 1)),
-        #               self._psi0(basis_vec, self.x))
         return np.tensordot(self.vecs,
                       self._psi0(basis_vec, self.x), axes=(-2,0))
+
+    def psi_tx(self, psi_0, t_vec):
+        # Caculate the overlap of the initial wavefunction with all of the eigenstates
+        psis = self.psi()
+        coeffs = simps(x=self.x, y= psi_0 * psis, axis=-1)
+
+
+        # Calculate the complex phases at each time
+        phases = np.exp(-1j * np.outer(t_vec, self.eigs))
+
+
+        # Calculate the wavefunction on the grid at each time slice
+        psi_of_t = np.dot(phases * coeffs, psis)
+        print(psi_of_t.shape)
+
+        return psi_of_t
+
+    def prob_tx(self, psi_0, t_vec):
+        return np.absolute(self.psi_tx(psi_0, t_vec)) ** 2
+
+    def psi_tk(self, psi_0, t_vec):
+        psitx = self.psi_tx(psi_0,t_vec)
+
+        return fftpack.fft(psitx)
+
+
+    def prob_tk(self, psi_0, t_vec):
+        return np.absolute(self.psi_tk(psi_0, t_vec)) ** 2
 
     def prob(self):
         return self.psi() ** 2
@@ -210,17 +248,3 @@ class Schrod:
 
 
 
-
-if __name__ == "__main__":
-    # Specify the potential
-    x = np.linspace(-5, 5, 200)
-    V = 3*np.sin(5*x)
-
-    # Create and solve Schrodinger's equation
-    eqn = Schrod(x, V)
-    sol = eqn.solve_to_tol(n_eig=5, tol=1e-10, n_init=50, n_max=200)
-
-    # Print the first five eigenvalues
-    print("Eigenvalues: ", eqn.eigs[0:5])
-    print("Error estimate: ", sol.eig_errs)
-    print("Number of basis states at convergence: ", sol.n_basis_converged)
