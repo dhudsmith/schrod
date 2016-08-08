@@ -12,7 +12,7 @@ eqn.solve()
 
 # Get the eigenvalues and eigenvectors
 eig_vals = eqn.eigs
-psis = eqn.psi()
+psis = eqn.psi_eig_x()
 
 # Plot everything
 plt.xlim((x[0],x[-1]))

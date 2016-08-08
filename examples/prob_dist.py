@@ -12,7 +12,7 @@ eqn.solve()
 
 # Get the eigenvalues and eigenvectors
 eig_vals = eqn.eigs
-probs = eqn.prob()
+probs = eqn.prob_eig_x()
 
 # Plot everything
 plt.xlim((x[0],x[-1]))

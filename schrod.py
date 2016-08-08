@@ -57,7 +57,7 @@ class Schrod:
         self._x_center = self._x_min + self._box_size / 2.
 
         self._dk = 2*np.pi / self._box_size
-        self.k = -0.5 * self._N * self._dk + self._dk * np.arange(self._N)
+        self.k = -0.5 * (self._N-1) * self._dk + self._dk * np.arange(self._N)
 
     def solve(self, verbose=False):
         if verbose:
@@ -122,22 +122,22 @@ class Schrod:
         return solution(err, n, passed)
 
 
-
-    def psi(self):
+    def psi_eig_x(self):
         basis_vec = np.arange(1, self.vecs.shape[-1] + 1)
 
         return np.tensordot(self.vecs,
                       self._psi0(basis_vec, self.x), axes=(-2,0))
 
-    def psi_tx(self, psi_0, t_vec):
-        # Caculate the overlap of the initial wavefunction with all of the eigenstates
-        psis = self.psi()
-        coeffs = simps(x=self.x, y= psi_0 * psis, axis=-1)
+    def prob_eig_x(self):
+        return self.psi_eig_x() ** 2
 
+    def psi_tx(self, psi_0_x, t_vec):
+        # Caculate the overlap of the initial wavefunction with all of the eigenstates
+        psis = self.psi_eig_x()
+        coeffs = simps(x=self.x, y=psi_0_x * psis, axis=-1)
 
         # Calculate the complex phases at each time
         phases = np.exp(-1j * np.outer(t_vec, self.eigs))
-
 
         # Calculate the wavefunction on the grid at each time slice
         psi_of_t = np.dot(phases * coeffs, psis)
@@ -153,12 +153,8 @@ class Schrod:
 
         return fftpack.fft(psitx)
 
-
     def prob_tk(self, psi_0, t_vec):
         return np.absolute(self.psi_tk(psi_0, t_vec)) ** 2
-
-    def prob(self):
-        return self.psi() ** 2
 
     # Get functions
     def get_x(self):
