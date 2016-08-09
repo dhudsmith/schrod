@@ -1,15 +1,19 @@
+from __future__ import print_function
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import schrod
 
+# Note: this example is under construction!
+
 ######################################################################
 # Set and solve Schrodinger's Equation
 
 # Specify the potential
-x = np.linspace(-10, 10, 400)
+x = np.linspace(-10, 10, 1000)
 # V = 1/2 * x**2
-V = np.zeros(400)
+V = np.zeros(1000)
 
 # Create and solve Schrodinger's equation
 eqn = schrod.Schrod(x, V, n_basis=75)

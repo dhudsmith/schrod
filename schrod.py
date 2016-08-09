@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import numpy as np
 from scipy.integrate import simps
 from scipy import fftpack

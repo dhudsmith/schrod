@@ -3,6 +3,7 @@
 # than solving for one potential at a time because executing in batch
 # doesn't require transitioning back in forth between the python
 # and the C backend between jobs.
+from __future__ import print_function
 
 import schrod
 import numpy as np
