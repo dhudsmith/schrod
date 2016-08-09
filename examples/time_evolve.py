@@ -119,7 +119,8 @@ ani = animation.FuncAnimation(fig, update_line,
                               interval=15,
                               init_func=init,
                               blit=True)
+FFMpegWriter = animation.writers['ffmpeg']
 
 ani.save('animations/time_evolve.mp4',
          fps=30, dpi=120,
-         extra_args=['-vcodec', 'libx264'])
+         extra_args=['-vcodec', 'libx264', '-pix_fmt', 'yuv420p'])
