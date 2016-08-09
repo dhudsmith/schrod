@@ -1,3 +1,8 @@
+"""
+Solve Schodinger's equation and plot the probability distributions
+Author: D. Hudson Smith
+"""
+
 from __future__ import print_function
 
 import matplotlib.pyplot as plt

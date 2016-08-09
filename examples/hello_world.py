@@ -1,3 +1,8 @@
+"""
+Solve Schodinger's equation and print some eigenvalues
+Author: D. Hudson Smith
+"""
+
 from __future__ import print_function
 
 import schrod, numpy

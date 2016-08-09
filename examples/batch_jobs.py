@@ -1,8 +1,15 @@
-# We can efficiently solve for multiple potentials with one command
-# Under the hood, using the batch functionality is more efficient
-# than solving for one potential at a time because executing in batch
-# doesn't require transitioning back in forth between the python
-# and the C backend between jobs.
+"""
+Solve multiple Schodinger's equations simultaneously (not concurrently).
+
+We can efficiently solve for multiple potentials with one command.
+Under the hood, using the batch functionality is more efficient
+than solving for one potential at a time because executing in batch
+doesn't require transitioning back in forth between python
+and the C backend between jobs.
+
+Author: D. Hudson Smith
+"""
+
 from __future__ import print_function
 
 import schrod

@@ -1,10 +1,15 @@
+"""
+Solve Schodinger's equation up to a specified error
+Author: D. Hudson Smith
+"""
+
 from __future__ import print_function
 
 import schrod, numpy
 
 # Specify the potential
 x = numpy.linspace(-20, 20, 200)
-V = 1/2 * x**2
+V = 1./2. * x**2
 
 # Ask for 10 digits of precision
 eqn = schrod.Schrod(x, V)

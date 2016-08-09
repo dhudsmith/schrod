@@ -1,3 +1,7 @@
+"""
+A class for representing and solving Schrodinger's equaiton
+"""
+
 from __future__ import print_function
 
 import numpy as np
@@ -6,16 +10,7 @@ from scipy import fftpack
 import warnings
 import collections
 
-""" Schrod: a fast, accurate, and general module for solving 1- and 2- particle Schrodinger equations.
-"""
-
-
 class Schrod:
-    """
-    A class for representing and solving the time-independent schrodinger
-    equation.
-    """
-
     def __init__(self, x, V, n_basis=20):
         """
         Parameters
@@ -52,14 +47,14 @@ class Schrod:
 
         # Set the derived quantities
         self._N = N
-        self._dx = x[1]-x[0]
+        self.dx = x[1] - x[0]
         self._x_min = x[0]
         self._x_max = x[-1]
         self.box_size = np.abs(self._x_max - self._x_min)
         self._x_center = self._x_min + self.box_size / 2.
 
-        self._dk = 2*np.pi / self.box_size
-        self.k = -0.5 * (self._N-1) * self._dk + self._dk * np.arange(self._N)
+        self.dk = 2 * np.pi / self.box_size
+        self.k = -0.5 * (self._N-1) * self.dk + self.dk * np.arange(self._N)
 
     def solve(self, verbose=False):
         if verbose:
@@ -123,7 +118,6 @@ class Schrod:
 
         return solution(err, n, passed)
 
-
     def psi_eig_x(self):
         basis_vec = np.arange(1, self.vecs.shape[-1] + 1)
 
@@ -159,21 +153,10 @@ class Schrod:
     def prob_tk(self, psi_0, t_vec):
         return np.absolute(self.psi_tk(psi_0, t_vec)) ** 2
 
-    # Get functions
-    def get_x(self):
-        return self.x
-
-    def get_V(self):
-        return self.V
-
-    def get_n_basis(self):
-        return self.n_basis
-
-    def get_eigvals(self):
-        return self.eigs
-
-    def get_eigvecs(self):
-        return self.vecs
+    def expected_E(self, psi):
+        integrand = -0.5 * np.conj(psi) * np.gradient(np.gradient(psi, self.dx, axis=-1), self.dx, axis=-1) + \
+                    np.absolute(psi)**2 * self.V
+        return np.real(simps(x=self.x, y=integrand, axis=-1))
 
     # Set functions
     def set_x(self, x):
@@ -215,6 +198,7 @@ class Schrod:
             print("")
 
         return h + np.diag(self._E0(np.arange(1, self.n_basis + 1)))
+
 
     def _psi0(self, n, x):
         """
