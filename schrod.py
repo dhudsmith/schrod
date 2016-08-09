@@ -55,10 +55,10 @@ class Schrod:
         self._dx = x[1]-x[0]
         self._x_min = x[0]
         self._x_max = x[-1]
-        self._box_size = np.abs(self._x_max - self._x_min)
-        self._x_center = self._x_min + self._box_size / 2.
+        self.box_size = np.abs(self._x_max - self._x_min)
+        self._x_center = self._x_min + self.box_size / 2.
 
-        self._dk = 2*np.pi / self._box_size
+        self._dk = 2*np.pi / self.box_size
         self.k = -0.5 * (self._N-1) * self._dk + self._dk * np.arange(self._N)
 
     def solve(self, verbose=False):
@@ -153,7 +153,8 @@ class Schrod:
     def psi_tk(self, psi_0, t_vec):
         psitx = self.psi_tx(psi_0,t_vec)
 
-        return fftpack.fft(psitx)
+        psitk = fftpack.fft(psitx, overwrite_x=True)
+        return fftpack.fftshift(psitk, axes=-1)
 
     def prob_tk(self, psi_0, t_vec):
         return np.absolute(self.psi_tk(psi_0, t_vec)) ** 2
@@ -179,8 +180,8 @@ class Schrod:
         self.x = x
         self._x_min = x[0]
         self._x_max = x[-1]
-        self._box_size = self._x_max = self._x_min
-        self._x_center = self._x_min + self._box_size / 2.
+        self.box_size = self._x_max = self._x_min
+        self._x_center = self._x_min + self.box_size / 2.
 
     def set_V(self, V):
         self.V = V
@@ -222,10 +223,10 @@ class Schrod:
         :param x: array-like, positions between -1 and 1
         :return: an array of shape (len(n), len(x))
         """
-        kn = n * np.pi / self._box_size
+        kn = n * np.pi / self.box_size
 
-        return np.sqrt(2 / self._box_size) * \
-               np.sin(np.outer(kn, x - self._x_center + self._box_size / 2))
+        return np.sqrt(2 / self.box_size) * \
+               np.sin(np.outer(kn, x - self._x_center + self.box_size / 2))
 
     def _E0(self, n):
         """
@@ -233,7 +234,7 @@ class Schrod:
         :param n: the state label
         :return: the energy
         """
-        return n ** 2 * np.pi ** 2 / (2. * self._box_size ** 2)
+        return n ** 2 * np.pi ** 2 / (2. * self.box_size ** 2)
 
     def _matel_integrand(self, m, n):
         """
