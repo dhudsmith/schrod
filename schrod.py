@@ -10,6 +10,7 @@ from scipy import fftpack
 import warnings
 import collections
 
+
 class Schrod:
     def __init__(self, x, V, n_basis=20):
         """
@@ -56,6 +57,10 @@ class Schrod:
         self.dk = 2 * np.pi / self.box_size
         self.k = -0.5 * (self._N-1) * self.dk + self.dk * np.arange(self._N)
 
+        # Allocate memory for eigenvalues and eigenvectors
+        self.eigs = np.zeros(shape=(V_shape[0], n_basis))
+        self.vecs = np.zeros(shape=(V_shape[0], n_basis, n_basis))
+
     def solve(self, verbose=False):
         if verbose:
             print("Calculating the Hamiltonian matrices...")
@@ -66,7 +71,7 @@ class Schrod:
 
         self.eigs, self.vecs = np.linalg.eigh(Hs, UPLO='L')
 
-    def solve_to_tol(self, n_eig, tol=1e-6, n_init=5, n_max=50, n_step=5, verbose=False):
+    def solve_to_tol(self, n_eig, tol=1e-6, n_init=5, n_max=50, n_step=5, err_type = "max_mean", verbose=False):
         """
         Increase the basis size until the maximum change among the lowest
         <n_eig> eigenvalues is less than <tol>
@@ -79,6 +84,11 @@ class Schrod:
             A: Boolean. True if maximum measured relative error less than or equal to <tol>
             B: The number of basis states included when convergence reached.
             C: The measured relative error
+        :param err_type: The type of error to calculate, one of
+                    "max": the maximum error is no greater than :param tol:
+                    "mean": the mean error is no greater than :param tol:
+                    "max_mean" (default): the maximum of the mean error per eigenvalue is no greater than :param tol:
+        :param verbose: bool, whether to print diagnostic information
         """
 
         # The initial truncation
@@ -99,7 +109,15 @@ class Schrod:
             eigs_new = self.eigs[..., 0:n_eig]
 
             err = np.abs((eigs - eigs_new) / 0.5 / (eigs + eigs_new))
-            measured_tol = np.max(err)
+            if err_type is "max":
+                measured_tol = np.max(err)
+            elif err_type is "mean":
+                measured_tol = np.mean(err)
+            elif err_type is "max_mean":
+                measured_tol = np.max(np.mean(err, axis=0))
+            else:
+                warnings.warn("Invalid <err_type>. Must be one of 'max', 'mean' or 'max_mean'. Assuming 'max_mean'.")
+                measured_tol = np.max(np.mean(err, axis=0))
             eigs = eigs_new
 
             if verbose:
@@ -239,6 +257,6 @@ if __name__ == "__main__":
     x = np.linspace(-1,1,10)
     V = 1/2 * x**2
 
-    eqn = Schrod(x,V)
+    eqn = Schrod(x, V)
     print(eqn.k)
 

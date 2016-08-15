@@ -5,10 +5,11 @@ from distutils.core import setup
 # to install the package and they don't have pypandoc or the README in the
 # right place.
 try:
-   import pypandoc
-   longdesc = pypandoc.convert('README.md', 'rst')
+    import pypandoc
+
+    longdesc = pypandoc.convert('README.md', 'rst')
 except (IOError, ImportError):
-   longdesc = ''
+    longdesc = ''
 
 setup(name='schrod',
       version='0.1dev',
@@ -17,6 +18,6 @@ setup(name='schrod',
       author="D. Hudson Smith",
       author_email="dane.hudson.smith@gmail.com",
       url="https://github.com/dhudsmith/schrod",
-      py_modules=['schrod',],
+      py_modules=['schrod', ],
       license="MIT License"
       )
