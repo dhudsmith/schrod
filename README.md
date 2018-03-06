@@ -42,3 +42,5 @@ Output:
 `[ 0.5         1.5         2.50000008  3.50000122  4.50001267]`
 
 For more examples, see the [examples](examples/) folder.
+
+~~~~ Testing trigger event ~~~~
