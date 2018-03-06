@@ -43,4 +43,4 @@ Output:
 
 For more examples, see the [examples](examples/) folder.
 
-~~~~ Testing trigger event yet again ~~~~
+~~~~~ Testing trigger event yet again ~~~~~
